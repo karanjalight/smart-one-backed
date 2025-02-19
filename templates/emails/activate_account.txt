@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Kaziquest</title>
+</head>
+
+<body style="background-color: #ffffff; padding: 20px;">
+
+  <table width="100%" bgcolor="#f0f8ff" style="border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); padding: 20px;">
+
+    <tr>
+      <td align="center">
+        <img src="https://kaziquest.com/assets/images/primary-logo.png"  width="250" height="70" alt="Logo">  
+      </td>
+    </tr>
+
+    <tr>
+      <td align="center">
+        <h2>You are almost there</h2>
+        Use the code below to activate your account
+        <h2>{{ code }}</h3>
+      </td>
+    </tr>
+
+    <tr>
+      <td align="center">
+        <table>
+          <tr>
+            <td>
+              <a href="https://www.facebook.com/kaziquest/">
+                <img src="http://paulgoddarddesign.com/emails/images/material-design/fb-icon.png" width="20" height="20" alt="Facebook">
+              </a>
+            </td>
+            <td>
+              <a href="https://twitter.com/KaziQuest">
+                <img src="http://paulgoddarddesign.com/emails/images/material-design/twitter-icon.png" width="20" height="20" alt="Twitter">
+              </a>
+            </td>
+            <td>
+              <a href="https://www.linkedin.com/company/kaziquest/">
+                <img src="http://paulgoddarddesign.com/emails/images/material-design/linkedin-icon.png" width="20" height="20" alt="Linkedin">
+              </a>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+<tr>
+  <td align="center">
+    13th floor, Hazina towers Nairobi Kenya
+  </td>
+</tr>
+    <tr>
+      <td align="center">
+        &copy; 2023 Kaziquest
+      </td>
+    </tr>
+
+  </table>
+
+</body>
+</html>

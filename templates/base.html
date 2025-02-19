@@ -1,0 +1,129 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Basic -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Mobile Metas -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <!-- Site Metas -->
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link
+      rel="shortcut icon"
+      {% comment %} href="{% static 'img/prime/prime.png' %}" {% endcomment %}
+      type=""
+    />
+
+    <title>Uniform Ordering</title>
+
+    <!-- fonts style -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- flowbite -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
+      rel="stylesheet"
+    />
+    <!-- tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <script
+      src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js"
+      defer
+    ></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Spartan:wght@600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        font-family: "Quicksand", sans-serif;
+      }
+      /* General form container styling */
+      form {
+          max-width: 500px;
+          margin: auto;
+          padding: 20px;
+          background-color: #444;
+          border-radius: 1rem;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Style for paragraph text */
+      form p {
+          color: #16a34a; /* Tailwind's green-600 */
+          font-size: 1rem;
+          margin-bottom: 8px;
+      }
+
+      /* Input fields styling */
+      form input[type="text"],
+      form input[type="password"],
+      form input[type="tel"],
+      form textarea {
+          width: 100%;
+          padding: 10px 15px;
+          border: 1px solid #ddd;
+          border-radius: 1rem; /* rounded-2xl equivalent */
+          font-size: 1rem;
+          background-color: #f3f4f6; /* Light gray for input background */
+          transition: border-color 0.2s;
+      }
+
+      form input[type="text"]:focus,
+      form input[type="email"]:focus,
+      form input[type="tel"]:focus,
+      form textarea:focus {
+          outline: none;
+          border-color: #16a34a; /* Green border on focus */
+      }
+
+      /* Button styling */
+      form button[type="submit"] {
+          display: block;
+          width: 100%;
+          padding: 12px;
+          border: none;
+          border-radius: 1rem; /* rounded-2xl equivalent */
+          font-size: 1rem;
+          font-weight: 600;
+          color: #fff;
+          background-image: linear-gradient(to right, #16a34a, #fb923c); /* Green to orange gradient */
+          cursor: pointer;
+          transition: background 0.3s;
+      }
+
+      form button[type="submit"]:hover {
+          background-image: linear-gradient(to right, #15803d, #f97316); /* Darker green to darker orange on hover */
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <di class='flex flex-col items-center justify-center h-screen bg-gradient-to-r from-blue-50   to-indigo-100'>
+      {% block content %} {% endblock content %}
+    
+
+      {% include "scripts.html" %}
+    </div>
+    {% block extra_scripts %}
+    {% endblock extra_scripts %}
+    <!-- end client section -->
+    {% comment %} <script src="https://app.stammer.ai/static/chatbot/js/chatbubble.js" data-id="ea4bd09f-0eb0-4a0e-83a4-7131f565a7de" data-domain="https://app.stammer.ai" ></script> {% endcomment %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+  </body>
+</html>
