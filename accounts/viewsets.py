@@ -6,6 +6,17 @@ from rest_framework import generics, status
 from .utils import get_tokens_for_user
 import json
 
+from django.contrib.auth import authenticate
+from django.utils.timezone import now
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
+from rest_framework.authtoken.models import Token
+from rest_framework import status
+from core.models import AuthenticationToken
+import uuid
+
+
 
 
 class RegisterUserViewSet(GenericViewSet, CreateModelMixin):
@@ -36,40 +47,47 @@ class UserDetailView(APIView):
         user = request.user
         serializer = UserSerializer(user)
         return Response(serializer.data)
+    
+class LoginAPIView(APIView):
+    permission_classes = [AllowAny]
 
-# class VerifyEmail(generics.GenericAPIView):
-#     permission_classes = [AllowAny, ]
+    def post(self, request):
+        username = request.data.get("username")
+        password = request.data.get("password")
+        user = authenticate(email=username, password=password)
+        
+        if not user:
+            return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        # Expire existing tokens
+        AuthenticationToken.objects.filter(user=user).delete()
+        
+        # Generate a new token
+        new_token = AuthenticationToken.objects.create(
+            id=uuid.uuid4(),
+            access_token=uuid.uuid4().hex,
+            expires_in=3600,  # Token valid for 1 hour
+            created_at=now(),
+            user=user
+        )
+        
+        return Response({
+            "token": new_token.access_token,
+            "expires_in": new_token.expires_in,
+            "user_id": user.id
+        }, status=status.HTTP_200_OK)
 
-#     def post(self, request):
-#         data = json.loads(request.body)
-#         token = data['token']
-#         uid = data['uid']
-#         user = None
-#         print('TOKEN', token)
-#         print('UID', uid)
-#         try:
-#             if token is not None and uid is not None:
-#                 uid = force_str(urlsafe_base64_decode(uid))
-#                 user = User.objects.get(pk=uid)
-#         # except(TypeError, ValueError, OverflowError, User.DoesNotExist):
-#         except Exception as e:
-#             user = None
-#             print('USER DOES NOT EXIST', str(e))
+class ValidateTokenAPIView(APIView):
+    def get(self, request):
+        token = request.headers.get("Authorization")
+        if not token:
+            return Response({"error": "Token required"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            auth_token = AuthenticationToken.objects.get(access_token=token)
+            if auth_token.is_expired():
+                return Response({"error": "Token expired"}, status=status.HTTP_401_UNAUTHORIZED)
             
-#         if user is not None:
-#             try:
-#                 if user.is_active == False:
-#                     if account_activation_token.check_token(user, token):
-#                         user.is_active = True
-#                         user.email_verified = True
-#                         user.save()
-#                         return Response({'success': 'Successfully activated'}, status=status.HTTP_200_OK)
-#                     else:
-#                         return Response({'invalid': 'Invalid token'}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
-#                 else:
-#                     return Response({'already': 'already activated'}, status=status.HTTP_226_IM_USED)
-#             except Exception as e:
-#                 print('TOKEN ERROR', str(e))
-#                 return Response({'error': 'Invalid token'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-#         # Return a response indicating that the user does not exist
-#         return Response({'no_user': 'User does not exist'}, status=status.HTTP_200_OK)
+            return Response({"valid": True, "user_id": auth_token.user.id})
+        except AuthenticationToken.DoesNotExist:
+            return Response({"error": "Invalid token"}, status=status.HTTP_401_UNAUTHORIZED)
