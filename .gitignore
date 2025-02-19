@@ -145,4 +145,4 @@ media_root
 # Ignore Django migrations
 **/migrations/**
 !**/migrations
-!**/migrations/__init__.py
+!**/migrations/__init__.py.env
