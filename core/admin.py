@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import AuthenticationToken, WaterMeter, MeterReading, ValveControl
+from .models import *
 
 @admin.register(AuthenticationToken)
 class AuthenticationTokenAdmin(admin.ModelAdmin):
@@ -28,3 +28,5 @@ class ValveControlAdmin(admin.ModelAdmin):
     search_fields = ('meter__meter_no',)
     list_filter = ('state', 'command_status', 'timestamp')
     prepopulated_fields = {'slug': ('meter', 'state')}
+
+admin.site.register(ValveStateHistory)
