@@ -36,7 +36,7 @@ class LoginView(views.APIView):
         # this code will get the meter readings
         # ==================================this  code should be uncommented to get data from 
         try:
-            # meter_token = self.get_or_refresh_meter_token(user)
+            meter_token = self.get_or_refresh_meter_token(user)
             pass
         except Exception as e:
             return Response(
@@ -72,26 +72,45 @@ class LoginView(views.APIView):
             
         # Get new token from meter API
         response = requests.post(
-            'http://localhost:8080/hservice/oauth/token',
+            'http://122.224.159.102:6709/hservice/oauth/token',
             params={
                 'client_id': settings.METER_API_CLIENT,
                 'client_secret': settings.METER_API_SECRET
             }
         )
-        
-        if response.status_code != 200:
-            raise Exception('Failed to get meter token')
+
+        print(response)
+        try:
+            data = response.json()
             
-        data = response.json()
-        
-        # Create new token record
-        token = AuthenticationToken.objects.create(
+            # Ensure it's a list and has at least one element
+            if not isinstance(data, list) or len(data) == 0:
+                raise Exception(f'Unexpected response format: {data}')
+            
+            # Get the first object in the list
+            token_data = data[0]
+            
+            if "access_token" not in token_data or "expires_in" not in token_data:
+                raise Exception(f'Missing expected keys in response: {token_data}')
+            
+        except ValueError:
+            raise Exception(f'Invalid JSON response: {response.text}')
+
+        if response.status_code != 200 or token_data.get("code") != "0":
+            raise Exception(f"Meter API error: {token_data.get('error', 'Unknown error')}")
+
+        token, created = AuthenticationToken.objects.update_or_create(
             user=user,
-            access_token=data['access_token'],
-            expires_in=int(data['expires_in'])
+            defaults={
+                "access_token": token_data["access_token"],
+                "expires_in": int(token_data["expires_in"]),
+            }
         )
-        
-        return token
+        token.access_token = token_data["access_token"]
+        token.save()
+        print(token_data["access_token"])
+
+        return token  # Or whatever you need to do with the token
 
 class MeterAPIView(views.APIView):
     """Base class for meter API views"""

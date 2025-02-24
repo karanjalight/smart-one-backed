@@ -218,6 +218,6 @@ CKEDITOR_CONFIGS = {
 
 
 # settings.py additions
-METER_API_BASE_URL = 'http://localhost:8080/hservice'
-METER_API_SECRET = 'your-secret-key' 
-METER_API_CLIENT = 'your-client-key' 
+METER_API_BASE_URL = 'http://122.224.159.102:6709/hservice'
+METER_API_SECRET = '123456' 
+METER_API_CLIENT = 'feizhou' 
